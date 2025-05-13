@@ -277,45 +277,46 @@ const styles = StyleSheet.create({
     height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#0A1428',  // Cor de fundo mais escura
   },
   container: {
     flex: 1,
     width: '100%',
     padding: 16,
-    backgroundColor: 'rgba(10, 20, 40, 0.85)',
+    backgroundColor: 'rgba(10, 20, 40, 0.85)',  // Fundo escuro com transparência
   },
   titulo: {
     fontSize: 32,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: '#FFFFFF',  // Cor branca para o título
     textAlign: 'center',
     marginVertical: 20,
   },
   nome: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: '#FFFFFF',  // Cor branca para os nomes dos jogadores
     marginBottom: 8,
   },
   info: {
     fontSize: 16,
-    color: '#EEEEEE',
+    color: '#EEEEEE',  // Cor suave para as informações
   },
   textoBotao: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: '#FFFFFF',  // Cor branca nos botões
   },
   item: {
-    backgroundColor: 'rgba(255, 255, 255, 0.28)',
+    backgroundColor: 'rgba(255, 255, 255, 0.28)',  // Fundo semi-transparente branco
     padding: 20,
     borderRadius: 12,
     marginBottom: 14,
-    shadowColor: '#000',
+    shadowColor: '#000',  // Cor da sombra
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.5,
     shadowRadius: 5,
-    elevation: 5,
+    elevation: 5,  // Sombra para dispositivos Android
   },
   botoes: {
     flexDirection: 'row',
@@ -323,7 +324,7 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
   botaoEditar: {
-    backgroundColor: 'rgba(14, 35, 73, 0.85)',
+    backgroundColor: 'rgba(14, 35, 73, 0.85)',  // Cor de fundo para o botão de editar
     paddingVertical: 12,
     borderRadius: 8,
     flex: 1,
@@ -331,7 +332,7 @@ const styles = StyleSheet.create({
     marginRight: 6,
   },
   botaoExcluir: {
-    backgroundColor: 'rgba(14, 35, 73, 0.85)',
+    backgroundColor: 'rgba(14, 35, 73, 0.85)',  // Cor de fundo para o botão de excluir
     paddingVertical: 12,
     borderRadius: 8,
     flex: 1,
@@ -339,7 +340,7 @@ const styles = StyleSheet.create({
     marginLeft: 6,
   },
   botaoAdicionar: {
-    backgroundColor: '#fff',
+    backgroundColor: '#fff',  // Cor branca para o botão de adicionar
     paddingVertical: 16,
     borderRadius: 12,
     width: '90%',
@@ -347,49 +348,40 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: 24,
   },
-  buttonSecondary: {
-    backgroundColor: '#fff',
-    paddingVertical: 14,
-    paddingHorizontal: 25,
-    borderRadius: 10,
-    marginTop: 20,
-    width: '90%',
-    alignItems: 'center',
-    alignSelf: 'center',
-  },
   modalContainer: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.85)',
+    backgroundColor: 'rgba(0, 0, 0, 0.85)',  // Fundo escuro para o modal
     justifyContent: 'center',
     padding: 24,
   },
   modalContent: {
-    backgroundColor: '#FAFAFA',
+    backgroundColor: '#FAFAFA',  // Fundo claro no modal
     borderRadius: 16,
     padding: 24,
   },
   input: {
     borderWidth: 1,
-    borderColor: '#888',
+    borderColor: '#888',  // Cor de borda dos inputs
     borderRadius: 8,
     fontSize: 16,
     marginBottom: 16,
     paddingVertical: 12,
     paddingHorizontal: 10,
-    backgroundColor: '#FFFFFF',
-    color: '#000000',
+    backgroundColor: '#FFFFFF',  // Fundo branco para os inputs
+    color: '#000000',  // Cor do texto nos inputs
   },
   botaoSalvar: {
-    backgroundColor: 'rgba(14, 35, 73, 0.85)',
+    backgroundColor: 'rgba(14, 35, 73, 0.85)',  // Cor para o botão de salvar
     paddingVertical: 14,
     borderRadius: 10,
     marginBottom: 12,
     alignItems: 'center',
   },
   botaoCancelar: {
-    backgroundColor: 'rgba(14, 35, 73, 0.85)',
+    backgroundColor: 'rgba(14, 35, 73, 0.85)',  // Cor para o botão de cancelar
     paddingVertical: 14,
     borderRadius: 10,
     alignItems: 'center',
   },
 });
+
