@@ -95,14 +95,6 @@ export default function UploadVideoScreen({ navigation }) {
         </Pressable>
       )}
 
-
-      <TouchableOpacity
-        style={styles.buttonSecondary}
-        onPress={() => navigation.navigate('PaginaPrincipal')}
-        activeOpacity={0.7}
-      >
-        <Text style={styles.buttonText}>Voltar para a página principal</Text>
-      </TouchableOpacity>
     </ImageBackground>
   );
 }
@@ -143,5 +135,16 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: '#000',
+  },
+
+  buttonPrimary: {
+     backgroundColor: '#fff',
+    paddingVertical: 14,
+    paddingHorizontal: 25,
+    borderRadius: 10,
+    marginTop: 20,
+    width: '90%',
+    alignItems: 'center',
+    alignSelf: 'center',
   },
 });
