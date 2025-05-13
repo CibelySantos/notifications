@@ -1,20 +1,27 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+import ListarJogadores from './src/screens/listarJogadores';
+import PaginaPrincipal from './src/screens/paginaPrincipal';
+import UploadImag from './src/screens/uploadImag';
+import ListarImag from './src/screens/listarImag';
+import UploadVideo from './src/screens/uploadVideos';  
+import listarVideo from './src/screens/listaVideo';  
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+const Stack = createNativeStackNavigator();
+
+const app = () => (
+  <NavigationContainer>
+    <Stack.Navigator initialRouteName="PaginaPrincipal" screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="PaginaPrincipal" component={PaginaPrincipal} />
+      <Stack.Screen name="ListarJogadores" component={ListarJogadores} />
+      <Stack.Screen name="UploadImag" component={UploadImag} />
+      <Stack.Screen name="ListarImag" component={ListarImag} />
+      <Stack.Screen name="UploadVideo" component={UploadVideo} />
+      <Stack.Screen name="listarVideo" component={listarVideo} />
+    </Stack.Navigator>
+  </NavigationContainer>
+);
+
+export default app;
