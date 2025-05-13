@@ -1,8 +1,7 @@
-// Cibely Cristiny dos Santos
-
 import React, { useState } from 'react';
 import { View, Button, Image, ActivityIndicator, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import * as Notifications from 'expo-notifications';  // Importar o pacote de notificações
 import s3 from '../../awsConfig';
 
 const bucket = "bucket-storage-senai-03";
@@ -39,7 +38,7 @@ export default function UploadImageScreen({ navigation }) {
       ACL: 'public-read',
     };
 
-    s3.upload(params, (err, data) => {
+    s3.upload(params, async (err, data) => {
       setUploading(false);
       if (err) {
         alert('Erro ao fazer upload');
@@ -47,6 +46,16 @@ export default function UploadImageScreen({ navigation }) {
       } else {
         alert('Upload feito com sucesso!');
         console.log('URL:', data.Location);
+
+        // Agendar uma notificação após o upload ser bem-sucedido
+        await Notifications.scheduleNotificationAsync({
+          content: {
+            title: "Imagem Carregada!",
+            body: "Sua imagem foi carregada com sucesso.",
+            data: { url: data.Location },
+          },
+          trigger: null,  // A notificação será enviada imediatamente
+        });
       }
     });
   };
@@ -62,7 +71,7 @@ export default function UploadImageScreen({ navigation }) {
         onPress={() => navigation.navigate('PaginaPrincipal')} 
         activeOpacity={0.7}
       >
-        <Text style={[styles.buttonText, { color: 'black' }]}>
+        <Text style={[styles.buttonText, { color: 'black' }]} >
           Voltar para a página principal
         </Text>
       </TouchableOpacity>

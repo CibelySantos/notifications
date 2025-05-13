@@ -1,9 +1,8 @@
-// Cibely Cristiny dos Santos
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Button, ActivityIndicator, StyleSheet, TouchableOpacity, Text, ImageBackground } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { Video } from 'expo-av'; 
+import * as Notifications from 'expo-notifications';  // Importando expo-notifications
 import s3 from '../../awsConfig';
 
 const bucket = "bucket-storage-senai-03";
@@ -11,6 +10,18 @@ const bucket = "bucket-storage-senai-03";
 export default function UploadVideoScreen({ navigation }) {
   const [video, setVideo] = useState(null);
   const [uploading, setUploading] = useState(false);
+
+  // Solicitar permissões para notificações
+  const requestPermissions = async () => {
+    const { status } = await Notifications.requestPermissionsAsync();
+    if (status !== 'granted') {
+      alert('Você precisa permitir notificações para receber alertas!');
+    }
+  };
+
+  useEffect(() => {
+    requestPermissions(); // Solicitar permissões ao montar o componente
+  }, []);
 
   const pickVideo = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -40,7 +51,7 @@ export default function UploadVideoScreen({ navigation }) {
       ACL: 'public-read',
     };
 
-    s3.upload(params, (err, data) => {
+    s3.upload(params, async (err, data) => {
       setUploading(false);
       if (err) {
         alert('Erro ao fazer upload');
@@ -48,6 +59,16 @@ export default function UploadVideoScreen({ navigation }) {
       } else {
         alert('Upload feito com sucesso!');
         console.log('URL:', data.Location);
+
+        // Enviar uma notificação local após o upload bem-sucedido
+        await Notifications.scheduleNotificationAsync({
+          content: {
+            title: "Vídeo Carregado!",
+            body: "Seu vídeo foi carregado com sucesso.",
+            data: { url: data.Location },  // Pode incluir a URL do vídeo carregado, caso queira
+          },
+          trigger: null,  // A notificação será enviada imediatamente
+        });
       }
     });
   };

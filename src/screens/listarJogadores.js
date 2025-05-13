@@ -259,7 +259,7 @@ export default function Jogadores() {
             </Pressable>
         <Pressable
           onPress={() => setModalVisible(false)}
-          style={styles.botaoFechar}
+          style={styles.botaoCancelar}
         >
           <Text style={styles.textoBotao}>Cancelar</Text>
         </Pressable>
@@ -271,84 +271,125 @@ export default function Jogadores() {
 }
 
 const styles = StyleSheet.create({
-background: {
-flex: 1,
-backgroundColor: '#121212',
-padding: 20,
-},
-titulo: {
-color: '#fff',
-fontSize: 26,
-fontWeight: 'bold',
-marginBottom: 15,
-textAlign: 'center',
-},
-item: {
-backgroundColor: '#1e1e1e',
-padding: 15,
-borderRadius: 12,
-marginBottom: 12,
-},
-nome: {
-color: '#fff',
-fontSize: 18,
-fontWeight: 'bold',
-},
-info: {
-color: '#ccc',
-fontSize: 14,
-},
-botoes: {
-flexDirection: 'row',
-justifyContent: 'space-between',
-marginTop: 10,
-},
-botaoEditar: {
-backgroundColor: '#4caf50',
-padding: 10,
-borderRadius: 8,
-},
-botaoExcluir: {
-backgroundColor: '#f44336',
-padding: 10,
-borderRadius: 8,
-},
-botaoAdicionar: {
-backgroundColor: '#2196f3',
-padding: 12,
-borderRadius: 10,
-alignItems: 'center',
-marginTop: 20,
-},
-textoBotao: {
-color: '#fff',
-fontWeight: 'bold',
-},
-modalContainer: {
-flex: 1,
-backgroundColor: '#121212',
-},
-modalContent: {
-padding: 20,
-},
-input: {
-backgroundColor: '#2c2c2c',
-color: '#fff',
-padding: 10,
-marginBottom: 15,
-borderRadius: 8,
-},
-botaoSalvar: {
-backgroundColor: '#4caf50',
-padding: 12,
-borderRadius: 10,
-alignItems: 'center',
-marginBottom: 10,
-},
-botaoFechar: {
-backgroundColor: '#888',
-padding: 12,
-borderRadius: 10,
-alignItems: 'center',
-},
+  background: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  container: {
+    flex: 1,
+    width: '100%',
+    padding: 16,
+    backgroundColor: 'rgba(10, 20, 40, 0.85)',
+  },
+  titulo: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+    textAlign: 'center',
+    marginVertical: 20,
+  },
+  nome: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+    marginBottom: 8,
+  },
+  info: {
+    fontSize: 16,
+    color: '#EEEEEE',
+  },
+  textoBotao: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+  },
+  item: {
+    backgroundColor: 'rgba(255, 255, 255, 0.28)',
+    padding: 20,
+    borderRadius: 12,
+    marginBottom: 14,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.5,
+    shadowRadius: 5,
+    elevation: 5,
+  },
+  botoes: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 16,
+  },
+  botaoEditar: {
+    backgroundColor: 'rgba(14, 35, 73, 0.85)',
+    paddingVertical: 12,
+    borderRadius: 8,
+    flex: 1,
+    alignItems: 'center',
+    marginRight: 6,
+  },
+  botaoExcluir: {
+    backgroundColor: 'rgba(14, 35, 73, 0.85)',
+    paddingVertical: 12,
+    borderRadius: 8,
+    flex: 1,
+    alignItems: 'center',
+    marginLeft: 6,
+  },
+  botaoAdicionar: {
+    backgroundColor: '#fff',
+    paddingVertical: 16,
+    borderRadius: 12,
+    width: '90%',
+    alignItems: 'center',
+    alignSelf: 'center',
+    marginTop: 24,
+  },
+  buttonSecondary: {
+    backgroundColor: '#fff',
+    paddingVertical: 14,
+    paddingHorizontal: 25,
+    borderRadius: 10,
+    marginTop: 20,
+    width: '90%',
+    alignItems: 'center',
+    alignSelf: 'center',
+  },
+  modalContainer: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.85)',
+    justifyContent: 'center',
+    padding: 24,
+  },
+  modalContent: {
+    backgroundColor: '#FAFAFA',
+    borderRadius: 16,
+    padding: 24,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#888',
+    borderRadius: 8,
+    fontSize: 16,
+    marginBottom: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    backgroundColor: '#FFFFFF',
+    color: '#000000',
+  },
+  botaoSalvar: {
+    backgroundColor: 'rgba(14, 35, 73, 0.85)',
+    paddingVertical: 14,
+    borderRadius: 10,
+    marginBottom: 12,
+    alignItems: 'center',
+  },
+  botaoCancelar: {
+    backgroundColor: 'rgba(14, 35, 73, 0.85)',
+    paddingVertical: 14,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
 });
