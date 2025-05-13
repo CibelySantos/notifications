@@ -62,20 +62,20 @@ export default function UploadImageScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <Button title="Selecionar Imagem" onPress={pickImage} />
-      {image && <Image source={{ uri: image }} style={styles.image} />}
-      {uploading ? <ActivityIndicator /> : <Button title="Fazer Upload" onPress={uploadImage} />}
+  <Pressable style={styles.buttonPrimary} onPress={pickImage}>
+    <Text style={styles.buttonText}>Selecionar Imagem</Text>
+  </Pressable>
 
-      <TouchableOpacity
-        style={styles.buttonSecondary}
-        onPress={() => navigation.navigate('PaginaPrincipal')} 
-        activeOpacity={0.7}
-      >
-        <Text style={[styles.buttonText, { color: 'black' }]} >
-          Voltar para a página principal
-        </Text>
-      </TouchableOpacity>
-    </View>
+  {image && <Image source={{ uri: image }} style={styles.image} />}
+
+  {uploading ? (
+    <ActivityIndicator size="large" color="#FFF" />
+  ) : (
+    <Pressable style={styles.buttonPrimary} onPress={uploadImage}>
+      <Text style={styles.buttonText}>Fazer Upload</Text>
+    </Pressable>
+  )}
+</View>
   );
 }
 
@@ -100,4 +100,28 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     alignSelf: 'center',
   },
+  buttonPrimary: {
+  backgroundColor: '#4CAF50',
+  paddingVertical: 14,
+  paddingHorizontal: 25,
+  borderRadius: 10,
+  marginTop: 20,
+  width: '90%',
+  alignItems: 'center',
+  alignSelf: 'center',
+},
+
+buttonText: {
+  fontSize: 18,
+  fontWeight: 'bold',
+  color: '#fff',
+},
+
+image: {
+  width: 300,
+  height: 300,
+  marginVertical: 10,
+  resizeMode: 'contain',
+},
+
 });
