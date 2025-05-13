@@ -3,6 +3,7 @@ import { View, Button, Image, ActivityIndicator, StyleSheet, TouchableOpacity, T
 import * as ImagePicker from 'expo-image-picker';
 import * as Notifications from 'expo-notifications';  // Importar o pacote de notificações
 import s3 from '../../awsConfig';
+import { ImageBackground } from 'react-native-web';
 
 const bucket = "bucket-storage-senai-03";
 
@@ -61,30 +62,46 @@ export default function UploadImageScreen({ navigation }) {
   };
 
   return (
-    <View style={styles.container}>
+    <ImageBackground
+    source={require('../assets/backgroundpaginic.jpg')}
+          style={styles.container}
+        >
   <Pressable style={styles.buttonPrimary} onPress={pickImage}>
     <Text style={styles.buttonText}>Selecionar Imagem</Text>
   </Pressable>
 
-  {image && <Image source={{ uri: image }} style={styles.image} />}
+  { image && <Image source={{ uri: image }} style={styles.image} /> }
 
-  {uploading ? (
-    <ActivityIndicator size="large" color="#FFF" />
-  ) : (
-    <Pressable style={styles.buttonPrimary} onPress={uploadImage}>
-      <Text style={styles.buttonText}>Fazer Upload</Text>
-    </Pressable>
-  )}
-</View>
+  {
+    uploading ? (
+      <ActivityIndicator size="large" color="#FFF" />
+    ) : (
+      <Pressable style={styles.buttonPrimary} onPress={uploadImage}>
+        <Text style={styles.buttonText}>Fazer Upload</Text>
+      </Pressable>
+    )
+  }
+</ImageBackground >
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
+    flex: 1,
+    width: '100%',
+    padding: 16,
     justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(10, 20, 40, 0.85)',
   },
-  image: {
+  titulo: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+    textAlign: 'center',
+    marginVertical: 20,
+  },
+  video: {
     width: 300,
     height: 300,
     marginVertical: 10,
@@ -100,28 +117,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     alignSelf: 'center',
   },
+  buttonText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#000',
+  },
+
   buttonPrimary: {
-  backgroundColor: '#4CAF50',
-  paddingVertical: 14,
-  paddingHorizontal: 25,
-  borderRadius: 10,
-  marginTop: 20,
-  width: '90%',
-  alignItems: 'center',
-  alignSelf: 'center',
-},
-
-buttonText: {
-  fontSize: 18,
-  fontWeight: 'bold',
-  color: '#fff',
-},
-
-image: {
-  width: 300,
-  height: 300,
-  marginVertical: 10,
-  resizeMode: 'contain',
-},
-
+    backgroundColor: '#fff',
+    paddingVertical: 14,
+    paddingHorizontal: 25,
+    borderRadius: 10,
+    marginTop: 20,
+    width: '90%',
+    alignItems: 'center',
+    alignSelf: 'center',
+  },
 });
