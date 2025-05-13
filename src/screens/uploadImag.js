@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Button, Image, ActivityIndicator, StyleSheet, TouchableOpacity, Text } from 'react-native';
+import { View, Button, Image, ActivityIndicator, StyleSheet, TouchableOpacity, Text, Pressable } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import * as Notifications from 'expo-notifications';  // Importar o pacote de notificações
 import s3 from '../../awsConfig';
