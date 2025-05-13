@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { View, Button, ActivityIndicator, StyleSheet, TouchableOpacity, Text, ImageBackground } from 'react-native';
+import { View, ActivityIndicator, StyleSheet, TouchableOpacity, Text, ImageBackground, Pressable } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import { Video } from 'expo-av'; 
-import * as Notifications from 'expo-notifications';  // Importando expo-notifications
+import { Video } from 'expo-av';
+import * as Notifications from 'expo-notifications'; 
 import s3 from '../../awsConfig';
 
 const bucket = "bucket-storage-senai-03";
@@ -20,7 +20,7 @@ export default function UploadVideoScreen({ navigation }) {
   };
 
   useEffect(() => {
-    requestPermissions(); // Solicitar permissões ao montar o componente
+    requestPermissions(); 
   }, []);
 
   const pickVideo = async () => {
@@ -60,32 +60,45 @@ export default function UploadVideoScreen({ navigation }) {
         alert('Upload feito com sucesso!');
         console.log('URL:', data.Location);
 
-        // Enviar uma notificação local após o upload bem-sucedido
         await Notifications.scheduleNotificationAsync({
           content: {
             title: "Vídeo Carregado!",
             body: "Seu vídeo foi carregado com sucesso.",
-            data: { url: data.Location },  // Pode incluir a URL do vídeo carregado, caso queira
+            data: { url: data.Location }, 
           },
-          trigger: null,  // A notificação será enviada imediatamente
+          trigger: null,
         });
       }
     });
   };
 
   return (
-    <ImageBackground 
+    <ImageBackground
       source={require('../assets/backgroundpaginic.jpg')}
       style={styles.container}
     >
       <Text style={styles.titulo}>Upload de Vídeo</Text>
-      <Button title="Selecionar Vídeo" onPress={pickVideo} />
-      {video && <Video source={{ uri: video }} style={styles.video} useNativeControls />}
-      {uploading ? <ActivityIndicator size="large" color="#FFF" /> : <Button title="Fazer Upload" onPress={uploadVideo} />}
-      
+
+      <Pressable style={styles.buttonPrimary} onPress={pickVideo}>
+        <Text style={styles.buttonText}>Selecionar Vídeo</Text>
+      </Pressable>
+
+      {video && (
+        <Video source={{ uri: video }} style={styles.video} useNativeControls />
+      )}
+
+      {uploading ? (
+        <ActivityIndicator size="large" color="#FFF" />
+      ) : (
+        <Pressable style={styles.buttonPrimary} onPress={uploadVideo}>
+          <Text style={styles.buttonText}>Fazer Upload</Text>
+        </Pressable>
+      )}
+
+
       <TouchableOpacity
         style={styles.buttonSecondary}
-        onPress={() => navigation.navigate('PaginaPrincipal')} 
+        onPress={() => navigation.navigate('PaginaPrincipal')}
         activeOpacity={0.7}
       >
         <Text style={styles.buttonText}>Voltar para a página principal</Text>
@@ -101,7 +114,7 @@ const styles = StyleSheet.create({
     padding: 16,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(10, 20, 40, 0.85)', 
+    backgroundColor: 'rgba(10, 20, 40, 0.85)',
   },
   titulo: {
     fontSize: 32,
