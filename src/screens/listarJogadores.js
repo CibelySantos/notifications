@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, FlatList, Modal, Pressable, Image, Alert, ScrollView, StyleSheet } from 'react-native';
+import { View, Text, TextInput, FlatList, Modal, Pressable, Image, Alert, ScrollView, StyleSheet, ImageBackground } from 'react-native';
 import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, Timestamp } from 'firebase/firestore';
 import Constants from 'expo-constants';
@@ -74,27 +74,9 @@ export default function Jogadores() {
     }
 
     try {
-      const [day, month, year] = nascimento.split('/');
-
-      // Verificar se a data inserida é válida
-      if (isNaN(day) || isNaN(month) || isNaN(year) || day < 1 || month < 1 || month > 12) {
-        alert('Data inválida, insira no formato dd/mm/aaaa');
-        return;
-      }
-
-      // Verificar se o dia é válido para o mês
-      const validDaysInMonth = new Date(0, month, year).getDate();
-      if (day > validDaysInMonth) {
-        alert(`Esse mês tem apenas ${validDaysInMonth} dias!`);
-        return;
-      }
-
-      // Criar a data com o formato correto para o JavaScript: yyyy-MM-dd
-      const nascimentoDate = new Date(`${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`);
-      
-      // Verificar se a data é válida
+      const nascimentoDate = new Date(nascimento);
       if (isNaN(nascimentoDate.getTime())) {
-        alert('Data inválida, por favor insira uma data válida!');
+        alert('Data inválida, por favor insira uma data válida no formato YYYY-MM-DD!');
         return;
       }
 
@@ -108,7 +90,7 @@ export default function Jogadores() {
           camisa,
           nascimento: nascimentoTimestamp,
         });
-        alert('Sucesso', 'Jogador atualizado com sucesso!');
+        alert('Jogador atualizado com sucesso!');
       } else {
         await addDoc(collection(db, 'real-madrid'), {
           nome,
@@ -116,9 +98,7 @@ export default function Jogadores() {
           camisa,
           nascimento: nascimentoTimestamp,
         });
-        alert('Sucesso', 'Jogador adicionado com sucesso!');
-
-        // Notificação só quando for novo jogador
+        alert('Jogador adicionado com sucesso!');
         await Notifications.scheduleNotificationAsync({
           content: {
             title: 'Novo jogador no elenco!',
@@ -139,7 +119,7 @@ export default function Jogadores() {
 
     } catch (error) {
       console.error('Erro ao salvar jogador:', error);
-      alert('Erro', 'Não foi possível salvar as alterações.');
+      alert('Erro ao salvar o jogador.');
     }
   };
 
@@ -178,218 +158,178 @@ export default function Jogadores() {
   };
 
   return (
-    <View style={styles.background}>
-      <Image
-        source={{ uri: 'https://logodetimes.com/times/real-madrid/logo-real-madrid-256.png' }}
-        style={{ width: 100, height: 100, alignSelf: 'center', marginBottom: 10 }}
-      />
-      <Text style={styles.titulo}>Real Madrid - Elenco</Text>
+    <ImageBackground
+      source={{ url }}
+      style={styles.background}
+      resizeMode="cover"
+    >
+      <ScrollView contentContainerStyle={styles.container}>
+        <Image
+          source={{ uri: 'https://logodetimes.com/times/real-madrid/logo-real-madrid-256.png' }}
+          style={{ width: 100, height: 100, alignSelf: 'center', marginBottom: 10 }}
+        />
+        <Text style={styles.titulo}>Real Madrid - Elenco</Text>
 
-      <FlatList
-        data={jogadores}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <View style={styles.item}>
-            <Text style={styles.nome}>Nome: {item.nome}</Text>
-            <Text style={styles.info}>Altura: {item.altura} m</Text>
-            <Text style={styles.info}>Camisa: {item.camisa}</Text>
-            <Text style={styles.info}>Nascimento: {new Date(item.nascimento.seconds * 1000).toLocaleDateString()}</Text>
-            <View style={styles.botoes}>
-              <Pressable onPress={() => editarJogador(item)} style={styles.botaoEditar}>
-                <Text style={styles.textoBotao}>Editar</Text>
+        <FlatList
+          data={jogadores}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <View style={styles.item}>
+              <Text style={styles.nome}>Nome: {item.nome}</Text>
+              <Text style={styles.info}>Altura: {item.altura} m</Text>
+              <Text style={styles.info}>Camisa: {item.camisa}</Text>
+              <Text style={styles.info}>Nascimento: {new Date(item.nascimento.seconds * 1000).toLocaleDateString()}</Text>
+              <View style={styles.botoes}>
+                <Pressable onPress={() => editarJogador(item)} style={styles.botaoEditar}>
+                  <Text style={styles.textoBotao}>Editar</Text>
+                </Pressable>
+                <Pressable onPress={() => excluirJogador(item.id)} style={styles.botaoExcluir}>
+                  <Text style={styles.textoBotao}>Excluir</Text>
+                </Pressable>
+              </View>
+            </View>
+          )}
+        />
+
+        <Pressable
+          onPress={() => {
+            limparCampos();
+            setModalVisible(true);
+          }}
+          style={styles.botaoAdicionar}
+        >
+          <Text style={styles.textoBotao}>+ Jogador</Text>
+        </Pressable>
+
+        <Modal visible={modalVisible} animationType="slide">
+          <ScrollView style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <Text style={{ color: 'black', fontSize: 20, marginBottom: 20 }}>Preencha os dados:</Text>
+
+              <TextInput
+                placeholder="Nome"
+                placeholderTextColor="#888"
+                value={nome}
+                onChangeText={setNome}
+                style={styles.input}
+              />
+              <TextInput
+                placeholder="Altura (ex: 1.80)"
+                placeholderTextColor="#888"
+                keyboardType="decimal-pad"
+                value={altura}
+                onChangeText={setAltura}
+                style={styles.input}
+              />
+              <TextInput
+                placeholder="Número da camisa"
+                placeholderTextColor="#888"
+                value={camisa}
+                onChangeText={setCamisa}
+                style={styles.input}
+              />
+              <TextInput
+                placeholder="Data de nascimento (YYYY-MM-DD)"
+                placeholderTextColor="#888"
+                value={nascimento}
+                onChangeText={setNascimento}
+                style={styles.input}
+              />
+
+              <Pressable onPress={salvarJogador} style={styles.botaoSalvar}>
+                <Text style={styles.textoBotao}>Salvar</Text>
               </Pressable>
-              <Pressable onPress={() => excluirJogador(item.id)} style={styles.botaoExcluir}>
-                <Text style={styles.textoBotao}>Excluir</Text>
+              <Pressable onPress={() => setModalVisible(false)} style={styles.botaoCancelar}>
+                <Text style={styles.textoBotao}>Cancelar</Text>
               </Pressable>
             </View>
-          </View>
-        )}
-      />
-
-      <Pressable
-        onPress={() => {
-          limparCampos();
-          setModalVisible(true);
-        }}
-        style={styles.botaoAdicionar}
-      >
-        <Text style={styles.textoBotao}>+ Jogador</Text>
-      </Pressable>
-
-      <Modal visible={modalVisible} animationType="slide">
-        <ScrollView style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={{ color: 'black', fontSize: 20, marginBottom: 20 }}>Preencha os dados:</Text>
-
-            <TextInput
-              placeholder="Nome"
-              placeholderTextColor="#888"
-              value={nome}
-              onChangeText={setNome}
-              style={styles.input}
-            />
-            <TextInput
-              placeholder="Altura (ex: 1.80)"
-              placeholderTextColor="#888"
-              keyboardType="decimal-pad"
-              value={altura}
-              onChangeText={setAltura}
-              style={styles.input}
-            />
-            <TextInput
-              placeholder="Número da camisa"
-              placeholderTextColor="#888"
-              value={camisa}
-              onChangeText={setCamisa}
-              style={styles.input}
-            />
-            <TextInput
-              placeholder="Data de nascimento (YYYY-MM-DD)"
-              placeholderTextColor="#888"
-              value={nascimento}
-              onChangeText={setNascimento}
-              style={styles.input}
-            />
-
-            <Pressable
-              onPress={salvarJogador}
-              style={styles.botaoSalvar}
-            >
-              <Text style={styles.textoBotao}>Salvar</Text>
-            </Pressable>
-        <Pressable
-          onPress={() => setModalVisible(false)}
-          style={styles.botaoCancelar}
-        >
-          <Text style={styles.textoBotao}>Cancelar</Text>
-        </Pressable>
-      </View>
-    </ScrollView>
-  </Modal>
-</View>
-);
+          </ScrollView>
+        </Modal>
+      </ScrollView>
+    </ImageBackground>
+  );
 }
 
 const styles = StyleSheet.create({
   background: {
     flex: 1,
-    width: '100%',
-    height: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   container: {
-    flex: 1,
-    width: '100%',
     padding: 16,
-    backgroundColor: 'rgba(10, 20, 40, 0.85)',
+    paddingBottom: 100,
   },
   titulo: {
     fontSize: 32,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: '#fff',
     textAlign: 'center',
     marginVertical: 20,
   },
   nome: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: 'bold',
-    color: '#FFFFFF',
-    marginBottom: 8,
+    color: '#fff',
   },
   info: {
-    fontSize: 16,
-    color: '#EEEEEE',
-  },
-  textoBotao: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: '#ddd',
   },
   item: {
-    backgroundColor: 'rgba(255, 255, 255, 0.28)',
-    padding: 20,
-    borderRadius: 12,
-    marginBottom: 14,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.5,
-    shadowRadius: 5,
-    elevation: 5,
+    backgroundColor: 'rgba(0,0,0,0.6)',
+    borderRadius: 10,
+    padding: 16,
+    marginBottom: 16,
   },
   botoes: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 16,
+    marginTop: 12,
   },
   botaoEditar: {
-    backgroundColor: 'rgba(14, 35, 73, 0.85)',
-    paddingVertical: 12,
+    backgroundColor: '#007bff',
+    padding: 10,
     borderRadius: 8,
-    flex: 1,
-    alignItems: 'center',
-    marginRight: 6,
   },
   botaoExcluir: {
-    backgroundColor: 'rgba(14, 35, 73, 0.85)',
-    paddingVertical: 12,
+    backgroundColor: '#dc3545',
+    padding: 10,
     borderRadius: 8,
-    flex: 1,
-    alignItems: 'center',
-    marginLeft: 6,
   },
   botaoAdicionar: {
-    backgroundColor: '#fff',
-    paddingVertical: 16,
-    borderRadius: 12,
-    width: '90%',
-    alignItems: 'center',
-    alignSelf: 'center',
-    marginTop: 24,
-  },
-  buttonSecondary: {
-    backgroundColor: '#fff',
-    paddingVertical: 14,
-    paddingHorizontal: 25,
+    backgroundColor: '#28a745',
+    padding: 14,
     borderRadius: 10,
-    marginTop: 20,
-    width: '90%',
     alignItems: 'center',
-    alignSelf: 'center',
-  },
-  modalContainer: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.85)',
-    justifyContent: 'center',
-    padding: 24,
-  },
-  modalContent: {
-    backgroundColor: '#FAFAFA',
-    borderRadius: 16,
-    padding: 24,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#888',
-    borderRadius: 8,
-    fontSize: 16,
-    marginBottom: 16,
-    paddingVertical: 12,
-    paddingHorizontal: 10,
-    backgroundColor: '#FFFFFF',
-    color: '#000000',
+    marginTop: 16,
   },
   botaoSalvar: {
-    backgroundColor: 'rgba(14, 35, 73, 0.85)',
-    paddingVertical: 14,
+    backgroundColor: '#007bff',
+    padding: 14,
     borderRadius: 10,
-    marginBottom: 12,
+    marginVertical: 8,
     alignItems: 'center',
   },
   botaoCancelar: {
-    backgroundColor: 'rgba(14, 35, 73, 0.85)',
-    paddingVertical: 14,
+    backgroundColor: '#6c757d',
+    padding: 14,
     borderRadius: 10,
     alignItems: 'center',
+  },
+  textoBotao: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+  modalContainer: {
+    flex: 1,
+    padding: 16,
+  },
+  modalContent: {
+    marginTop: 50,
+  },
+  input: {
+    borderBottomWidth: 1,
+    borderBottomColor: '#aaa',
+    marginBottom: 12,
+    padding: 10,
+    color: '#000',
   },
 });
